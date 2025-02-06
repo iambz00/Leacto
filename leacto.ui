@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>338</width>
-    <height>403</height>
+    <width>379</width>
+    <height>170</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -18,280 +18,342 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>338</width>
-    <height>403</height>
+    <width>379</width>
+    <height>170</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>338</width>
-    <height>400</height>
+    <width>379</width>
+    <height>170</height>
    </size>
-  </property>
-  <property name="baseSize">
-   <size>
-    <width>4</width>
-    <height>0</height>
-   </size>
-  </property>
-  <property name="font">
-   <font>
-    <family>Malgun Gothic</family>
-   </font>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_4">
-    <item>
-     <layout class="QHBoxLayout" name="Topbar">
-      <property name="spacing">
-       <number>6</number>
+   <widget class="QTabWidget" name="tabWidget">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>361</width>
+      <height>151</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+      <horstretch>200</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>320</width>
+      <height>0</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>16777215</width>
+      <height>16777215</height>
+     </size>
+    </property>
+    <property name="font">
+     <font>
+      <family>Malgun Gothic</family>
+     </font>
+    </property>
+    <property name="tabPosition">
+     <enum>QTabWidget::North</enum>
+    </property>
+    <property name="tabShape">
+     <enum>QTabWidget::Rounded</enum>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="tabLogin">
+     <attribute name="title">
+      <string>로그인</string>
+     </attribute>
+     <widget class="QWidget" name="layoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>9</x>
+        <y>9</y>
+        <width>331</width>
+        <height>104</height>
+       </rect>
       </property>
-      <item>
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="chkBrowser">
-        <property name="text">
-         <string>브라우저보기</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btnCloseCourse">
-        <property name="text">
-         <string>강의닫기</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <widget class="QGroupBox" name="Login">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-        <horstretch>200</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
+      <property name="font">
+       <font>
+        <family>Malgun Gothic</family>
+       </font>
       </property>
-      <property name="minimumSize">
-       <size>
-        <width>320</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>320</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <property name="title">
-       <string>Login</string>
-      </property>
-      <property name="flat">
-       <bool>false</bool>
-      </property>
-      <property name="checkable">
-       <bool>false</bool>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
-       <property name="sizeConstraint">
-        <enum>QLayout::SetDefaultConstraint</enum>
-       </property>
-       <item>
-        <layout class="QGridLayout" name="gridLayout" rowstretch="1,2,1">
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_3">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>URL</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_4">
-           <property name="text">
-            <string>ID</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_5">
-           <property name="text">
-            <string>PW</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QLineEdit" name="linePw">
-           <property name="autoFillBackground">
-            <bool>false</bool>
-           </property>
-           <property name="inputMask">
-            <string/>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="echoMode">
-            <enum>QLineEdit::Password</enum>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QLineEdit" name="lineId"/>
-         </item>
-         <item row="0" column="1" colspan="2">
-          <widget class="QLineEdit" name="lineUrl">
-           <property name="autoFillBackground">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>https://www.gbeti.or.kr/</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="2" rowspan="2">
-          <widget class="QPushButton" name="btnLogin">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>로그인</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item>
-     <widget class="QGroupBox" name="Course">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>320</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="sizeIncrement">
-       <size>
-        <width>0</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="title">
-       <string>Course</string>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <property name="sizeConstraint">
-        <enum>QLayout::SetDefaultConstraint</enum>
-       </property>
-       <item>
-        <widget class="QListWidget" name="lstCourse">
+      <layout class="QGridLayout" name="gridTab1" rowstretch="1,1,1,1" columnstretch="5,20,10" rowminimumheight="21,21,21,21">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_6">
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>54</height>
+           <height>0</height>
           </size>
          </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>54</height>
-          </size>
+         <property name="font">
+          <font>
+           <family>Malgun Gothic</family>
+          </font>
+         </property>
+         <property name="text">
+          <string>URL</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_8">
+         <property name="font">
+          <font>
+           <family>Malgun Gothic</family>
+          </font>
+         </property>
+         <property name="text">
+          <string>PW</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_7">
+         <property name="font">
+          <font>
+           <family>Malgun Gothic</family>
+          </font>
+         </property>
+         <property name="text">
+          <string>ID</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="linePw">
+         <property name="font">
+          <font>
+           <family>Malgun Gothic</family>
+          </font>
+         </property>
+         <property name="autoFillBackground">
+          <bool>false</bool>
+         </property>
+         <property name="inputMask">
+          <string/>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="echoMode">
+          <enum>QLineEdit::Password</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="lineId">
+         <property name="font">
+          <font>
+           <family>Malgun Gothic</family>
+          </font>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2" rowspan="2">
+        <widget class="QPushButton" name="btnLogin">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Malgun Gothic</family>
+          </font>
+         </property>
+         <property name="text">
+          <string>로그인</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" colspan="2">
+        <widget class="QLineEdit" name="lineUrl">
+         <property name="font">
+          <font>
+           <family>Malgun Gothic</family>
+          </font>
+         </property>
+         <property name="autoFillBackground">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>https://www.gbeti.or.kr/</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1" colspan="2">
+        <widget class="QLabel" name="lblStatusbar">
+         <property name="text">
+          <string/>
          </property>
         </widget>
        </item>
       </layout>
      </widget>
-    </item>
-    <item>
-     <widget class="QGroupBox" name="Progress">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
+    </widget>
+    <widget class="QWidget" name="tabCourse">
+     <attribute name="title">
+      <string> 목록 </string>
+     </attribute>
+     <widget class="QListWidget" name="lstCourse">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>331</width>
+        <height>101</height>
+       </rect>
       </property>
       <property name="minimumSize">
        <size>
-        <width>320</width>
-        <height>0</height>
+        <width>0</width>
+        <height>54</height>
        </size>
       </property>
-      <property name="title">
-       <string>Progress</string>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>16777215</height>
+       </size>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <property name="sizeConstraint">
-        <enum>QLayout::SetDefaultConstraint</enum>
-       </property>
-       <item>
-        <widget class="QLabel" name="lblCourseInfo1">
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tabProgress">
+     <attribute name="title">
+      <string> 강의 </string>
+     </attribute>
+     <widget class="QWidget" name="gridLayoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>341</width>
+        <height>108</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_2" rowstretch="1,1,1,1" columnstretch="1,6,2" rowminimumheight="21,21,21,21">
+       <item row="2" column="1">
+        <widget class="QLabel" name="lblCourseInfo3">
+         <property name="font">
+          <font>
+           <family>Malgun Gothic</family>
+          </font>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="lbl1">
+         <property name="font">
+          <font>
+           <family>Malgun Gothic</family>
+          </font>
+         </property>
          <property name="text">
           <string>[차시]</string>
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QLabel" name="lblCourseInfo2">
+       <item row="1" column="0">
+        <widget class="QLabel" name="lbl2">
+         <property name="font">
+          <font>
+           <family>Malgun Gothic</family>
+          </font>
+         </property>
          <property name="text">
           <string>[강의]</string>
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QLabel" name="lblCourseInfo3">
+       <item row="2" column="0">
+        <widget class="QLabel" name="lbl3">
+         <property name="font">
+          <font>
+           <family>Malgun Gothic</family>
+          </font>
+         </property>
          <property name="text">
           <string>[진행]</string>
          </property>
         </widget>
        </item>
-       <item>
+       <item row="1" column="1" colspan="2">
+        <widget class="QLabel" name="lblCourseInfo2">
+         <property name="font">
+          <font>
+           <family>Malgun Gothic</family>
+          </font>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" colspan="2">
+        <widget class="QLabel" name="lblCourseInfo1">
+         <property name="font">
+          <font>
+           <family>Malgun Gothic</family>
+          </font>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QPushButton" name="btnCloseCourse">
+         <property name="font">
+          <font>
+           <family>Malgun Gothic</family>
+          </font>
+         </property>
+         <property name="text">
+          <string>강의닫기</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="3">
         <widget class="QProgressBar" name="pbProgress">
+         <property name="font">
+          <font>
+           <family>Malgun Gothic</family>
+          </font>
+         </property>
          <property name="layoutDirection">
           <enum>Qt::LeftToRight</enum>
          </property>
@@ -320,18 +382,36 @@
        </item>
       </layout>
      </widget>
-    </item>
-   </layout>
+    </widget>
+   </widget>
+   <widget class="QCheckBox" name="chkBrowser">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>10</y>
+      <width>71</width>
+      <height>19</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Malgun Gothic</family>
+     </font>
+    </property>
+    <property name="text">
+     <string>브라우저</string>
+    </property>
+   </widget>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <tabstops>
+  <tabstop>tabWidget</tabstop>
   <tabstop>lineUrl</tabstop>
   <tabstop>lineId</tabstop>
   <tabstop>linePw</tabstop>
   <tabstop>btnLogin</tabstop>
-  <tabstop>lstCourse</tabstop>
   <tabstop>chkBrowser</tabstop>
+  <tabstop>lstCourse</tabstop>
   <tabstop>btnCloseCourse</tabstop>
  </tabstops>
  <resources/>
