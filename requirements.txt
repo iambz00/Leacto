@@ -1,0 +1,3 @@
+selenium
+PyQt6
+webdriver-manager
