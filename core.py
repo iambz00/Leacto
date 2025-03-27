@@ -10,12 +10,10 @@ import time, os, urllib3, sys
 
 _BUNDLED = getattr(sys, 'frozen', False)
 
-def a(arg):
-    try:
-        print(arg, arg.split())
-    except:
-        print('except')
-    print('out of try')
+def querySelector(root, query):
+    return root.find_element(By.CSS_SELECTOR, query)
+def querySelectorAll(root, query):
+    return root.find_elements(By.CSS_SELECTOR, query)
 
 class LmsCore:
     def __init__(self, headless = True, size = "1080,580", mute = True):
@@ -29,7 +27,7 @@ class LmsCore:
         options = webdriver.ChromeOptions()
         options.add_argument("--log-level=3")
         if headless:
-            options.add_argument("--headless")
+            options.add_argument("--headless=new")
         options.add_argument("--window-size=" + size)
         if mute:
             options.add_argument("--mute-audio")
@@ -38,20 +36,15 @@ class LmsCore:
         options.add_argument("--autoplay-policy=no-user-gesture-required")
         options.add_experimental_option('excludeSwitches', ['enable-logging'])
     
-        driver_path = os.path.join(os.path.dirname(ChromeDriverManager().install()), "chromedriver.exe")
+        cdm = ChromeDriverManager()
+        driver_path = os.path.join(os.path.dirname(cdm.install()), "chromedriver.exe")
+        major_version = cdm.driver.get_driver_version_to_download().split('.')[0]
 
-        user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36'
-        if _BUNDLED:
-            driver = webdriver.Chrome(service=ChromeService(driver_path), options=options)
-            driver.implicitly_wait(1)
-            user_agent = driver.execute_script("return navigator.userAgent")
-            driver.quit()
-            print(f"* Get User-Agent: {user_agent}")
-            user_agent = user_agent.replace("Headless", "")
-
+        user_agent = f'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{major_version}.0.0.0 Safari/537.36'
         print(f"* Set User-Agent: {user_agent}")
         options.add_argument("user-agent=" + user_agent)
-        self.driver = webdriver.Chrome(service=ChromeService(driver_path), options=options)
+        self.driver = webdriver.Chrome(service=ChromeService(driver_path, popen_kw={"creation_flags":134217728}), options=options)
+        # popen_kw is needed to suppress 'DevTools listening on' Message
         self.driver.implicitly_wait(1)
 
         self.hMain = self.driver.current_window_handle
@@ -78,7 +71,7 @@ class LmsCore:
             print("* 로그인 중...")
             self.driver.get(self.url + "/system/login/login.do")
             self.close_popups()
-            login_id = self.querySelector("#userInputId")
+            login_id = querySelector(self.driver, "#userInputId")
             login_id.click()
             webdriver.ActionChains(self.driver).pause(0.5)\
                 .send_keys(userID).send_keys(Keys.TAB).pause(0.5)\
@@ -120,11 +113,12 @@ class LmsCore:
                 if len(text) > 40:
                     text = text[:36] + "..."
                 button = ""
+                progress = int(float(courses[i].find_element(By.CSS_SELECTOR, "ul.progress_list_wrap p.num").text.replace('%', '')))
                 for abtn in courses[i].find_elements(By.CSS_SELECTOR, "a"):
                     if abtn.text == "이어보기" or abtn.text == "학습하기":
                         button = abtn
                         break
-                self.courseList.append({ 'text': f"  [{i+1}] {text}", 'obj': button})
+                self.courseList.append({ 'text': f"  [{i+1}] {text}", 'obj': button, 'progress': progress})
             for i in range(len(self.courseList)):
                 print(self.courseList[i]['text'])
             return self.courseList
@@ -166,13 +160,13 @@ class LmsCore:
         current_subsect = " "
         current_progress = 0.0
         # Get First Button
-        startbutton = self.querySelector('a.btn_learning_list')
+        startbutton = querySelector(self.driver, 'a.btn_learning_list')
         if startbutton.is_displayed():
             startbutton.click()
             time.sleep(2)
         try:
             while not self.stop:
-                vjs_controlbar = self.querySelector("div.vjs-control-bar")
+                vjs_controlbar = querySelector(self.driver, "div.vjs-control-bar")
                 if str(vjs_controlbar.value_of_css_property("opacity")) != "1":
                     # Show video player control bar
                     # Set best playback rate. The rate is saved in 'Local storage'.
@@ -181,14 +175,14 @@ class LmsCore:
                         document.querySelector('.vjs-playback-rate.vjs-menu-button .vjs-menu-item').click()
                     ''')
                 time.sleep(self.delay)
-                subject = self.querySelector("div.class_list p.title_box").text.strip()
-                section = self.querySelector("div.class_list_box.ing li.play div a").text.strip()
+                subject = querySelector(self.driver, "div.class_list p.title_box").text.strip()
+                section = querySelector(self.driver, "div.class_list_box.ing li.play div a").text.strip()
                 if not section or section == "학습하기":
-                    section = self.querySelector("div.class_list_box.ing p").text.strip()
-                subsect = self.querySelector("#page-info").text.strip()
+                    section = querySelector(self.driver, "div.class_list_box.ing p").text.strip()
+                subsect = querySelector(self.driver, "#page-info").text.strip()
 
-                progress = float(self.querySelector("#lx-player div.vjs-progress-holder").get_attribute("aria-valuenow"))
-                progress_time = self.querySelector("#lx-player div.vjs-progress-holder").get_attribute("aria-valuetext").strip().split()
+                progress = float(querySelector(self.driver, "#lx-player div.vjs-progress-holder").get_attribute("aria-valuenow"))
+                progress_time = querySelector(self.driver, "#lx-player div.vjs-progress-holder").get_attribute("aria-valuetext").strip().split()
                 if len(progress_time) > 0:
                     played = progress_time[0]
                     length = progress_time[2]
@@ -210,8 +204,8 @@ class LmsCore:
                     print(f"\r  [강의]: {section} [{subsect}] {length}")
                     signal.emit([2, f"{section} [{subsect}]"])
                     current_subsect = subsect
-                is_quizpage = self.querySelector("#quizPage").is_displayed()
-                playbutton = self.querySelector("button.vjs-big-play-button")
+                is_quizpage = querySelector(self.driver, "#quizPage").is_displayed()
+                playbutton = querySelector(self.driver, "button.vjs-big-play-button")
                 if progress == current_progress:
                     if is_quizpage:
                         print(f"\r  [퀴즈]")
@@ -228,7 +222,7 @@ class LmsCore:
                 signal.emit([0, current_progress, played, length])
                 if current_progress >= 100.0:
                     try:
-                        popup = self.querySelector('div.popup_wrap p.desc')
+                        popup = querySelector(self.driver, 'div.popup_wrap p.desc')
                         if popup.is_displayed():
                             print(f'* {popup.text}')
                             self.stop = True
@@ -260,9 +254,6 @@ class LmsCore:
             self.driver.close()
             self.return_to_main()
         return True
-
-    def querySelector(self, query):
-        return self.driver.find_element(By.CSS_SELECTOR, query)
 
     def close(self):
         print("\n* 종료합니다.")

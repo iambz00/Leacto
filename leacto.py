@@ -60,20 +60,23 @@ class Leacto(QMainWindow, form_class):
         return wrapper
 
     def work(self, func, connector = None, args = [], start_msg = '', end_msg = ''):
-        if not self.worker or not self.worker.isRunning():
-            def _work(*args):
-                self.set_statusbar(start_msg)
-                result = func(*args)
-                self.set_statusbar(end_msg)
-                return result
-            self.worker = Leacto.Worker(_work, connector, args)
-            self.worker.start()
+        def _work(*args):
+            self.set_statusbar(start_msg)
+            result = func(*args)
+            self.set_statusbar(end_msg)
+            return result
+        worker = Leacto.Worker(_work, connector, args)
+        self.workers = [w for w in self.workers if w.isRunning()]
+        self.workers.append(worker)
+        worker.start()
+
 
     def __init__(self):
         super().__init__()
         self.lock = Lock()
         self.core = None
         self.worker = None
+        self.workers = []
         self.build_ui()
         self.show()
         self.statusbar_signal.connect(self.on_set_statusbar)
@@ -109,7 +112,6 @@ class Leacto(QMainWindow, form_class):
     @pyqtSlot(list)
     @breakEmission
     def on_login(self, success):
-        print('on_login', success)
         if success:
             self.tabLogin.setEnabled(False)
             self.tabWidget.setCurrentWidget(self.tabCourse)
