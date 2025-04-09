@@ -8,7 +8,7 @@ from core import LmsCore
 from functools import wraps
 
 NAME = 'Leacto'
-VERSION = '1.0'
+VERSION = '1.1'
 WINDOW_TITLE = f'{NAME} {VERSION}'
 WINDOW_ICON = 'leacto.ico'
 
@@ -18,8 +18,8 @@ UI_SUBWINDOW = 'leacto_browser.ui'
 BROWSER_REFRESH_RATE = 25 # Hz
 BROWSER_REFRESH_DELAY = 1000 // BROWSER_REFRESH_RATE
 
-BROWSER_WIDTH = 1080
-BROWSER_HEIGHT = 640
+BROWSER_WIDTH = 1280
+BROWSER_HEIGHT = 920
 BROWSER_SIZE = f'{BROWSER_WIDTH},{BROWSER_HEIGHT}'
 
 # if PyInstaller bundled
@@ -66,7 +66,7 @@ class Leacto(QMainWindow, form_class):
             self.set_statusbar(end_msg)
             return result
         worker = Leacto.Worker(_work, connector, args)
-        self.workers = [w for w in self.workers if w.isRunning()]
+        self.workers = [w for w in self.workers if not w.isFinished()]
         self.workers.append(worker)
         worker.start()
 
@@ -99,15 +99,15 @@ class Leacto(QMainWindow, form_class):
             self.btnLogin.setEnabled(True)
             self.chkBrowser.setEnabled(True)
 
-    def click_login(self):
-        self.work(self.login, self.on_login, start_msg = '로그인 중...')
-
     def login(self):
-        id = self.lineId.text()
-        pw = self.linePw.text()
-        if id and pw:
-            with self.lock:
-                return self.core.login(self.lineUrl.text(), id, pw)
+        def _login():
+            id = self.lineId.text()
+            pw = self.linePw.text()
+            if id and pw:
+                with self.lock:
+                    return self.core.login(self.lineUrl.text(), id, pw)
+        self.work(_login, self.on_login, start_msg = '로그인 중...')
+
 
     @pyqtSlot(list)
     @breakEmission
@@ -115,15 +115,15 @@ class Leacto(QMainWindow, form_class):
         if success:
             self.tabLogin.setEnabled(False)
             self.tabWidget.setCurrentWidget(self.tabCourse)
-            self.work(self.get_courselist, self.on_get_courselist)
+            def get_courselist():
+                try:
+                    return self.core.get_course()
+                except:
+                    self.tabWidget.setCurrentWidget(self.tabLogin)
+                    return []
+            self.work(get_courselist, self.on_get_courselist)
         else:
             self.set_statusbar('로그인 실패')
-
-    def get_courselist(self):
-        try:
-            return self.core.get_course()
-        except:
-            self.tabWidget.setCurrentWidget(self.tabLogin)
 
     @pyqtSlot(list)
     @breakEmission
@@ -131,23 +131,64 @@ class Leacto(QMainWindow, form_class):
         self.lstCourse.clear()
         self.course_info = course_list
         for course in self.course_info:
-            self.lstCourse.addItem(course['text'])
+            self.lstCourse.addItem(f'{course['text']}')
         self.tabCourse.setEnabled(True)
 
-    def doubleclick_course(self):
+    def select_course(self):
+        selected = self.lstCourse.currentRow()
+        if self.course_info[selected]['progress'] < 100:
+            self.btnStart.setEnabled(True)
+            self.btnHome.setEnabled(False)
+        else:
+            self.btnStart.setEnabled(False)
+            self.btnHome.setEnabled(True)
+        self.btnSurvey.setEnabled(False)
+        self.btnExam.setEnabled(False)
+
+    def start_course(self):
         self.tabCourse.setEnabled(False)
         self.btnCloseCourse.setEnabled(True)
         self.tabWidget.setCurrentWidget(self.tabProgress)
-        self.work(self.enter_course, self.on_finish_course)
-    
-    def enter_course(self):
-        # self.course_signal.connect(self.on_course)    # __init__
-        idx = self.lstCourse.currentRow()
-        return self.core.enter_course(idx, self.course_signal)
+        def _start_course():
+            idx = self.lstCourse.currentRow()
+            return self.core.enter_course(idx, self.course_signal)
+        self.work(_start_course, self.on_finish_course)
+
+    def open_home(self):
+        self.work(self.core.go_course_home, args=[self.lstCourse.currentRow()], connector=self.on_open_home)
+
+    def on_open_home(self):
+        self.btnHome.setEnabled(False)
+        self.btnSurvey.setEnabled(True)
+        self.btnExam.setEnabled(True)
+
+    def open_survey(self):
+        self.work(self.core.go_survey, connector=self.on_open_survey)
 
     @pyqtSlot(list)
     @breakEmission
-    def on_finish_course(self, success = True):
+    def on_open_survey(self, _):
+        self.browser.survey_mode = True
+        self.browser.exam_mode = False
+        self.browser.show()
+
+    def open_exam(self):
+        self.work(self.core.go_exam, connector=self.on_open_exam)
+
+    @pyqtSlot(list)
+    @breakEmission
+    def on_open_exam(self, _):
+        pass
+
+    def return_to_list(self):
+        def _clear_windows():
+            self.core.clear_windows()
+            return True
+        self.work(_clear_windows, connector=self.on_login)
+
+    @pyqtSlot(list)
+    @breakEmission
+    def on_finish_course(self, _):
         try:
             self.on_login([True])
         except:
@@ -187,9 +228,17 @@ class Leacto(QMainWindow, form_class):
         self.browser = LeactoBrowserWin(self)
         self.chkBrowser.setEnabled(False)
         self.chkBrowser.clicked.connect(self.toggle_browser)
-        self.linePw.returnPressed.connect(self.click_login)
-        self.btnLogin.clicked.connect(self.click_login)
-        self.lstCourse.doubleClicked.connect(self.doubleclick_course)
+        self.linePw.returnPressed.connect(self.login)
+        self.btnLogin.clicked.connect(self.login)
+
+        # self.lstCourse.doubleClicked.connect(self.doubleclick_course)
+        self.lstCourse.currentItemChanged.connect(self.select_course)
+        self.btnStart .clicked.connect(self.start_course)
+        self.btnHome  .clicked.connect(self.open_home)
+        self.btnSurvey.clicked.connect(self.open_survey)
+        self.btnExam  .clicked.connect(self.open_exam)
+        self.btnList  .clicked.connect(self.return_to_list)
+
         self.btnCloseCourse.setEnabled(False)
         self.btnCloseCourse.clicked.connect(self.stop_course)
 
@@ -229,11 +278,14 @@ class LeactoBrowserWin(QMainWindow, form_class2):
         super().__init__()
         self.build_ui()
         self.main = main
+        self.setFixedSize(1280, 780)
         self.screen = QPixmap()
         self.timer = QTimer()
         self.timer.timeout.connect(self.refresh_screen)
         self.timer.setInterval(BROWSER_REFRESH_DELAY)
         self.installEventFilter(self)
+        self.survey_mode = False
+        self.exam_mode = False
 
     def build_ui(self):
         self.setupUi(self)
@@ -247,13 +299,51 @@ class LeactoBrowserWin(QMainWindow, form_class2):
         except:
             pass
 
+    def check(self, num):
+        if self.survey_mode:
+            return self.main.core.survey_check(num)
+        elif self.exam_mode:
+            return self.main.core.exam_check(num)
+        return False
+
+    def move(self, forward = True):
+        if self.survey_mode:
+            return self.main.core.survey_move(forward)
+        elif self.exam_mode:
+            return self.main.core.exam_move(forward)
+        return False
+
     def showEvent(self, _):
+        self.main.chkBrowser.setChecked(True)
         self.timer.start()
     def hideEvent(self, _):
+        self.main.chkBrowser.setChecked(False)
         self.timer.stop()
     def closeEvent(self, _):
         self.main.chkBrowser.setChecked(False)
 
+    def keyPressEvent(self, event):
+        if self.survey_mode or self.exam_mode:
+            key = event.key()
+            if key == 49: # 1
+                self.check(1)
+            elif key == 50: # 2
+                self.check(2)
+            elif key == 51: # 3
+                self.check(3)
+            elif key == 52: # 4
+                self.check(4)
+            elif key == 53: # 5
+                self.check(5)
+            elif key == 16777234: # Left
+                self.move(False)
+            elif key == 16777236: # Right
+                self.move()
+            elif key == 16777235: # Up
+                self.main.core.scroll(0, 100)
+            elif key == 16777237: # Down
+                self.main.core.scroll(0, -100)
+            
     def wheelEvent(self, event):
         self.main.core.scroll(0, event.angleDelta().y() // 3)
 

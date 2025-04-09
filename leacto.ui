@@ -232,7 +232,7 @@
         <x>10</x>
         <y>10</y>
         <width>331</width>
-        <height>101</height>
+        <height>81</height>
        </rect>
       </property>
       <property name="minimumSize">
@@ -248,6 +248,68 @@
        </size>
       </property>
      </widget>
+     <widget class="QWidget" name="horizontalLayoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>92</y>
+        <width>331</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QPushButton" name="btnStart">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>학습하기</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnHome">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>강의실홈</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnSurvey">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>설문조사</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnExam">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>시험보기</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnList">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="text">
+          <string>목록으로</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
     <widget class="QWidget" name="tabProgress">
      <attribute name="title">
@@ -262,28 +324,16 @@
         <height>108</height>
        </rect>
       </property>
-      <layout class="QGridLayout" name="gridLayout_2" rowstretch="1,1,1,1" columnstretch="1,6,2" rowminimumheight="21,21,21,21">
-       <item row="2" column="1">
-        <widget class="QLabel" name="lblCourseInfo3">
+      <layout class="QGridLayout" name="gridLayout_2" rowstretch="1,1,1,1" columnstretch="1,6,2,0" rowminimumheight="21,21,21,21">
+       <item row="2" column="0">
+        <widget class="QLabel" name="lbl3">
          <property name="font">
           <font>
            <family>Malgun Gothic</family>
           </font>
          </property>
          <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="lbl1">
-         <property name="font">
-          <font>
-           <family>Malgun Gothic</family>
-          </font>
-         </property>
-         <property name="text">
-          <string>[차시]</string>
+          <string>[진행]</string>
          </property>
         </widget>
        </item>
@@ -299,19 +349,31 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="lbl3">
+       <item row="0" column="0">
+        <widget class="QLabel" name="lbl1">
          <property name="font">
           <font>
            <family>Malgun Gothic</family>
           </font>
          </property>
          <property name="text">
-          <string>[진행]</string>
+          <string>[차시]</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="1" colspan="2">
+       <item row="2" column="1">
+        <widget class="QLabel" name="lblCourseInfo3">
+         <property name="font">
+          <font>
+           <family>Malgun Gothic</family>
+          </font>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" colspan="3">
         <widget class="QLabel" name="lblCourseInfo2">
          <property name="font">
           <font>
@@ -323,7 +385,7 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1" colspan="2">
+       <item row="0" column="1" colspan="3">
         <widget class="QLabel" name="lblCourseInfo1">
          <property name="font">
           <font>
@@ -335,19 +397,7 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="2">
-        <widget class="QPushButton" name="btnCloseCourse">
-         <property name="font">
-          <font>
-           <family>Malgun Gothic</family>
-          </font>
-         </property>
-         <property name="text">
-          <string>강의닫기</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0" colspan="3">
+       <item row="3" column="0" colspan="4">
         <widget class="QProgressBar" name="pbProgress">
          <property name="font">
           <font>
@@ -377,6 +427,30 @@
          </property>
          <property name="format">
           <string>%p%</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="3">
+        <widget class="QPushButton" name="btnCloseCourse">
+         <property name="font">
+          <font>
+           <family>Malgun Gothic</family>
+          </font>
+         </property>
+         <property name="text">
+          <string>강의닫기</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QPushButton" name="btnPause">
+         <property name="font">
+          <font>
+           <family>Malgun Gothic</family>
+          </font>
+         </property>
+         <property name="text">
+          <string>일시중지</string>
          </property>
         </widget>
        </item>
